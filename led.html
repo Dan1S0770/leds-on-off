@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encender LED</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding-top: 100px;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    #ledBtn {
+      font-size: 24px;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      background-color: red;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <h1>Encender LED</h1>
+  <button id="ledBtn">ENCENDER</button>
+
+  <script>
+    const btn = document.getElementById("ledBtn");
+    let estado = false; // false = apagado, true = encendido
+    const ipESP = "http://192.168.101.10"; // IP de tu ESP8266
+
+    function actualizarBoton() {
+      btn.textContent = estado ? "APAGAR" : "ENCENDER";
+      btn.style.backgroundColor = estado ? "green" : "red";
+    }
+
+    btn.addEventListener("click", () => {
+      const accion = estado ? "LED-OFF" : "LED-ON";
+      fetch(${ipESP}/${accion})
+        .then(() => {
+          estado = !estado;
+          actualizarBoton();
+        })
+        .catch(() => alert("No se pudo conectar al ESP8266"));
+    });
+
+    actualizarBoton();
+  </script>
+</body>
+</html>
